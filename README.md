@@ -20,9 +20,10 @@ conda install -c conda-forge spleeter
 
 * Modify ```KALDI_ROOT``` in  ```a2l/path.sh``` according to where your Kaldi installation is.
 
-* Navigate to working directory
+* Navigate to working directory and activate the environment.
 ```
 cd 'dir-of-this-repository'/a2l
+conda activate mirex2020_ED
 ```
 
 * Set variables:
