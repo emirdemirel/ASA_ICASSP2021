@@ -16,7 +16,7 @@ conda create --name mirex2020_ED
 **Num2words**: Python package for easy numeric-to-alphabetic translation.
 ```
 conda install -c conda-forge spleeter
-conda install -c auto num2words
+pip install num2words
 ```
 
 ## How to run
