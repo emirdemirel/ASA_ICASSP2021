@@ -39,5 +39,9 @@ savepath='output-folder-name'       # This will be saved at 'dir-of-this-reposit
 ```
 ./run_a2l.sh $wavpath $lyricspath $savepath
 ```
+* (OPTIONAL) Align with Grapheme based model:
+```
+./run_a2l.sh --align_with_grapheme true $wavpath $lyricspath $savepath
+```
 
 Note : If you have any problems during the pipeline, look up for the relevant process in ```run_a2l.sh```
