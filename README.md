@@ -21,9 +21,14 @@ conda install -c conda-forge spleeter        ### Open-source library for music s
 pip install num2words                        ### This package is required only if you'd like to test the grapheme-based acoustic model for alignment.
 ```
 
-## How to run
+### 4) Setup Kaldi environment
 
-* Modify ```KALDI_ROOT``` in  ```a2l/path.sh``` according to where your Kaldi installation is.
+Modify ```KALDI_ROOT``` in  ```a2l/path.sh``` according to where your Kaldi installation is.
+```
+sed -i -- 's/path-to-your-kaldi-installation/${PATH_TO_YOUR_KALDI_INSTALLATION}/g' a2l/path.sh
+```
+
+## How to run
 
 * Navigate to working directory and activate the environment.
 ```
@@ -43,7 +48,7 @@ savepath='output-folder-name'       # This will be saved at 'dir-of-this-reposit
 ```
 * (OPTIONAL) Align with Grapheme based model:
 ```
-./run_run_mirex2020.sh --align_with_grapheme true $wavpath $lyricspath $savepath
+./run_mirex2020.sh --align_with_grapheme true $wavpath $lyricspath $savepath
 ```
 
 Note : If you have any problems during the pipeline, look up for the relevant process in ```run_a2l.sh```
