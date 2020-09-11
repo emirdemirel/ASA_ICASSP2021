@@ -21,9 +21,14 @@ conda install -c conda-forge spleeter        ### Open-source library for music s
 pip install num2words                        ### This package is required only if you'd like to test the grapheme-based acoustic model for alignment.
 ```
 
-## How to run
+### 4) Setup Kaldi environment
 
-* Modify ```KALDI_ROOT``` in  ```a2l/path.sh``` according to where your Kaldi installation is.
+Modify ```KALDI_ROOT``` in  ```a2l/path.sh``` according to where your Kaldi installation is.
+```
+sed -i -- 's/path-to-your-kaldi-installation/${PATH_TO_YOUR_KALDI_INSTALLATION}/g' a2l/path.sh
+```
+
+## How to run
 
 * Navigate to working directory and activate the environment.
 ```
