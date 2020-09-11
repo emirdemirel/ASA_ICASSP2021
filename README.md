@@ -16,7 +16,7 @@ conda create --name mirex2020_ED
 **Num2words**: Python package for easy numeric-to-alphabetic translation.
 ```
 conda install -c conda-forge spleeter
-pip install num2words
+pip install num2words                        ### This package is required only if you'd like to test the grapheme-based acoustic model for alignment.
 ```
 
 ## How to run
