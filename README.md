@@ -15,7 +15,7 @@ This framework is built as a [Kaldi](http://kaldi-asr.org/)[1] recipe
 For instructions on Kaldi installation, please visit https://github.com/kaldi-asr/kaldi
 
 
-### 3) Set up virtual environment and install dependencies
+### 2) Set up virtual environment and install dependencies
 
 ```
 cd a2l
@@ -23,7 +23,7 @@ conda env update -f environment.yml
 conda activate mirex2020_ED
 ```
 
-### 4) Setup Kaldi environment
+### 3) Setup Kaldi environment
 
 Modify ```KALDI_ROOT``` in  ```a2l/path.sh``` according to where your Kaldi installation is.
 ```
