@@ -27,6 +27,7 @@ conda activate mirex2020_ED
 
 Modify ```KALDI_ROOT``` in  ```a2l/path.sh``` according to where your Kaldi installation is.
 ```
+PATH_TO_YOUR_KALDI_INSTALLATION=
 sed -i -- 's/path-to-your-kaldi-installation/${PATH_TO_YOUR_KALDI_INSTALLATION}/g' a2l/path.sh
 ```
 
