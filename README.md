@@ -12,7 +12,7 @@ Python dependencies such as ```spleeter``` will be installed in this environment
 conda create --name mirex2020_ED 
 ```
 ### 3) Install Python dependencies
-**Spleeter**: This is an open-source source separation module that we use in the begining of our pipeline.
+**Spleeter**: This is an open-source source separation module that we use in the begining of our pipeline. \n
 **Num2words**: Python package for easy numeric-to-alphabetic translation.
 ```
 conda install -c conda-forge spleeter        ### Open-source library for music source separation.
