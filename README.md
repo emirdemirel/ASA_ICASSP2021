@@ -3,7 +3,9 @@
 # Requirements
 
 Python3.6
+
 Anaconda
+
 Kaldi (see below for installation)
 
 ## Setup
