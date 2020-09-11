@@ -48,7 +48,7 @@ savepath='output-folder-name'       # This will be saved at 'dir-of-this-reposit
 ```
 * (OPTIONAL) Align with Grapheme based model:
 ```
-./run_run_mirex2020.sh --align_with_grapheme true $wavpath $lyricspath $savepath
+./run_mirex2020.sh --align_with_grapheme true $wavpath $lyricspath $savepath
 ```
 
 Note : If you have any problems during the pipeline, look up for the relevant process in ```run_a2l.sh```
