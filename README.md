@@ -1,24 +1,24 @@
 # Submission for Mirex2020 - Audio-to-Lyrics-Alignment Challenge
 
+# Requirements
+
+Python3.6
+Anaconda
+Kaldi (see below for installation)
+
 ## Setup
 
 ### 1) Kaldi  installation
 This framework is built as a [Kaldi](http://kaldi-asr.org/)[1] recipe 
 For instructions on Kaldi installation, please visit https://github.com/kaldi-asr/kaldi
 
-### 2) Create a Conda environment
-Python dependencies such as ```spleeter``` will be installed in this environment.
-```
-conda create --name mirex2020_ED 
-```
-### 3) Install Python dependencies
 
-**Spleeter**: This is an open-source source separation module that we use in the begining of our pipeline.
+### 3) Set up virtual environment and install dependencies
 
-**Num2words**: Python package for easy numeric-to-alphabetic translation.
 ```
-conda install -c conda-forge spleeter        ### Open-source library for music source separation.
-pip install num2words                        ### This package is required only if you'd like to test the grapheme-based acoustic model for alignment.
+cd a2l
+conda env update -f environment.yml
+conda activate mirex2020_ED
 ```
 
 ### 4) Setup Kaldi environment
