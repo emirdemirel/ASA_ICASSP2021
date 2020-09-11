@@ -15,7 +15,7 @@ conda create --name mirex2020_ED
 **Spleeter**: This is an open-source source separation module that we use in the begining of our pipeline.
 **Num2words**: Python package for easy numeric-to-alphabetic translation.
 ```
-conda install -c conda-forge spleeter
+conda install -c conda-forge spleeter        ### Open-source library for music source separation.
 pip install num2words                        ### This package is required only if you'd like to test the grapheme-based acoustic model for alignment.
 ```
 
