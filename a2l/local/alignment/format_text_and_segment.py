@@ -8,7 +8,7 @@ key_name=sys.argv[2]
 segment_file_write_path=sys.argv[3]
 text_file_write_path=sys.argv[4]
 audio_end_time=sys.argv[5]
-num_words=8
+num_words=15
 with codecs.open(word_timing_path,'r') as f:
 	word_timing_contents=f.readlines()
 
