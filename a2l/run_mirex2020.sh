@@ -6,16 +6,15 @@ nj=1
 stage=0
 model_dir_chain=model/ctdnn
 
-align_with_grapheme=false
+alignment_model=ctdnn_sa    # FOR phoneme based NN model
+               # ctdnn_sa     FOR grapheme-based NN model
+               # gmm_hmm      FOR phoneme-based GMM-HMM model
+               # gmm_hmm_grph FOR grapheme-based GMM-HMM model
+
+
 . ./path.sh
-. ./cmd.sh
-set -e # exit on error
 
-[[ ! -L "steps" ]] && ln -s $KALDI_ROOT/egs/wsj/s5/steps
-[[ ! -L "utils" ]] && ln -s $KALDI_ROOT/egs/wsj/s5/utils
 
-# End configuration section
-. ./utils/parse_options.sh
 
 wavpath=$1
 lyricspath=$2
@@ -35,10 +34,14 @@ if [[ $stage -le 0 ]]; then
     # At this step, we separate vocals. This is required
     # for Vocal-Activity-Detection based initial audio 
     # segmentation (See stage 2 for details).
-
-    spleeter separate -i $wavpath -o $outdir_ss
-    mv $outdir_ss/${rec_id}/vocals.wav $outdir_ss/${rec_id}_vocals.wav
-    rm -r $outdir_ss/${rec_id}/  # remove accompiment output as we won't need it.
+    cd demucs
+    python3 -m demucs.separate --dl -n demucs -d cpu -o ../$outdir_ss $wavpath
+    cd ..
+    mv $outdir_ss/demucs/${rec_id}/vocals.wav $outdir_ss/${rec_id}_vocals.wav
+    rm -r $outdir_ss/demucs/${rec_id}/  # remove accompiment output as we won't need it.
+    #spleeter separate -i $wavpath -o $outdir_ss
+    #mv $outdir_ss/${rec_id}/vocals.wav $outdir_ss/${rec_id}_vocals.wav
+    #rm -r $outdir_ss/${rec_id}/  # remove accompiment output as we won't need it.
 fi
 
 wavpath_vocals=$outdir_ss/${rec_id}_vocals.wav
@@ -96,17 +99,38 @@ if [[ $stage -le 3 ]]; then
       $model_dir_chain $lang_dir
 fi
 
-if [[ $align_with_grapheme == true ]]; then
-    stage=4
-else
-    stage=5
-fi
 
 data_dir_segmented=data/${rec_id}_vocals_vadseg
 data_dir_final=data/${rec_id}_vadseg
 data_id=$(basename -- $data_dir_segmented)
 
-if [[ $stage -le 4 ]]; then
+if [[ $alignment_model == 'ctdnn_sa' ]]; then
+
+    echo "WORD-LEVEL ALIGNMENT"
+    echo
+    echo "Feature Extraction last time for alignment."
+    echo
+    utils/fix_data_dir.sh $data_dir_segmented
+    steps/make_mfcc.sh --cmd "$train_cmd" --nj 1 --mfcc-config conf/mfcc_hires.conf \
+      $data_dir_segmented exp/make_mfcc/${n}_vadseg mfcc
+    steps/compute_cmvn_stats.sh $data_dir_segmented
+    utils/fix_data_dir.sh $data_dir_segmented
+    #steps/online/nnet2/extract_ivectors_online.sh --cmd "$train_cmd" --nj 1 \
+      #${data_dir_segmented} model/ivector/extractor \
+      #model/ivector/ivectors_${data_id}_hires
+    echo "Forced alignment using Phoneme based CTDNN_SA model"
+    echo
+    ali_dir=exp/${rec_id}_vocals/${rec_id}_vocals_ali
+    local/align_chain.sh --cmd "$train_cmd" --nj 1 --beam 30 --retry_beam 7000 \
+      --frames_per_chunk 140 --scale-opts '--transition-scale=1.0 --acoustic-scale=1.0 --self-loop-scale=1.0' \
+      $data_dir_segmented $lang_dir $model_dir_chain $ali_dir
+    echo "Generating output files"
+    ./local/generate_output_alignment.sh --frame_shift 0.03 $data_dir_segmented $rec_id $lang_dir $ali_dir $savepath/alignment
+
+
+fi
+
+if [[ $alignment_model == 'ctdnn_sa_grph' ]]; then
 
     lang_dir_grph=data/lang_${rec_id}_grph
     model_dir_chain_grph=model/ctdnn_grph
@@ -141,32 +165,28 @@ if [[ $stage -le 4 ]]; then
 
 fi
 
-if [[ $stage -le 5 ]]; then
+
+if [[ $alignment_model == 'ctdnn_sa' ]]; then
 
     echo "WORD-LEVEL ALIGNMENT"
     echo
     echo "Feature Extraction last time for alignment."
     echo
     utils/fix_data_dir.sh $data_dir_segmented
-    steps/make_mfcc.sh --cmd "$train_cmd" --nj 1 --mfcc-config conf/mfcc_hires.conf \
+    steps/make_mfcc.sh --cmd "$train_cmd" --nj 1 \
       $data_dir_segmented exp/make_mfcc/${n}_vadseg mfcc
     steps/compute_cmvn_stats.sh $data_dir_segmented
     utils/fix_data_dir.sh $data_dir_segmented
-    #steps/online/nnet2/extract_ivectors_online.sh --cmd "$train_cmd" --nj 1 \
-      #${data_dir_segmented} model/ivector/extractor \
-      #model/ivector/ivectors_${data_id}_hires
     echo "Forced alignment using Phoneme based CTDNN_SA model"
     echo
     ali_dir=exp/${rec_id}_vocals/${rec_id}_vocals_ali
-    local/align_chain.sh --cmd "$train_cmd" --nj 1 --beam 50 --retry_beam 700 \
-      --frames_per_chunk 100 --scale-opts '--transition-scale=1.0 --acoustic-scale=1.0 --self-loop-scale=1.0' \
+    steps/align_fmllr.sh --cmd "$train_cmd" --nj 1 --beam 30 --retry_beam 7000 \
       $data_dir_segmented $lang_dir $model_dir_chain $ali_dir
     echo "Generating output files"
     ./local/generate_output_alignment.sh --frame_shift 0.03 $data_dir_segmented $rec_id $lang_dir $ali_dir $savepath/alignment
 
 
 fi
-
 
 
 rm -r exp/${rec_id}_vocals/${rec_id}_vocals_segmentation
