@@ -56,5 +56,15 @@ savepath='output-folder-name'       # This will be saved at 'dir-of-this-reposit
 ```
 ./run_mirex2020.sh --align_with_grapheme true $wavpath $lyricspath $savepath
 ```
+* (OPTIONAL) Align with GMM-HMM model:
+```
+./run_mirex2020.sh --alignment_model gmm_hmm $wavpath $lyricspath $savepath
+```
+
+
+* Run the pipeline for accapella recordings:
+```
+./run_mirex2020.sh --polyphonic false $wavpath $lyricspath $savepath
+```
 
 Note : If you have any problems during the pipeline, look up for the relevant process in ```run_a2l.sh```
