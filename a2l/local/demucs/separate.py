@@ -204,7 +204,7 @@ def main():
         sources = apply_model(model, wav, shifts=args.shifts, split=args.split, progress=True)
         sources = sources * ref.std() + ref.mean()
 
-        track_folder = out / track.name.split(track.name.split(".")[-1])[0]
+        track_folder = out / track.name.split('.'+track.name.split(".")[-1])[0]
         track_folder.mkdir(exist_ok=True)
         for source, name in zip(sources, source_names):
             if args.mp3 or not args.float32:
