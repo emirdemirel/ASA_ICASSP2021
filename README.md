@@ -72,6 +72,8 @@ Note : If you have any problems during the pipeline, look up for the relevant pr
 
 ## B) Automatic Lyrics Transcription
 
+* First, you need to obtain the trained decoding graph from me. Once you have ``` graph_4G_ALT```, relocate it to ```a2l/model/ctdnn/```. 
+
 * Set variables:
 ```
 wavpath='full-path-to-audio'        # i.e. /home/emir/ALTA/LyricsTranscription/wav/Bohemian_Rhapsody.mp3
