@@ -22,6 +22,7 @@ For instructions on Kaldi installation, please visit https://github.com/kaldi-as
 ```
 cd a2l
 git clone https://github.com/facebookresearch/demucs
+cp local/demucs/separate.py demucs/demucs/separate.py
 conda env update -f environment.yml
 conda activate mirex2020_ED
 ```
