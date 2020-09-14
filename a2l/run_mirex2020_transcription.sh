@@ -80,25 +80,25 @@ if [[ $stage -le 2 ]]; then
     steps/compute_cmvn_stats.sh ${testset}_VAD
     utils/fix_data_dir.sh ${testset}_VAD
 
-    echo "I-VECTOR EXTRACTION on VAD data"
-    steps/online/nnet2/extract_ivectors_online.sh --cmd "$train_cmd" --nj 1 \
-      ${testset}_VAD model/ivector/extractor \
-      exp/nnet3/ivectors_${rec_id}_VAD
-
 fi
 
 graph_dir=model/ctdnn/graph_4G_ALT
 if [ $stage -le 3 ]; then
-  nspk=$(wc -l <${testset}/spk2utt)
+  echo
+  echo "DECODING"   
+  echo
   steps/nnet3/decode.sh \
       --acwt 1.0 --post-decode-acwt 10.0 \
       --frames-per-chunk 140 --beam 2000 --lattice_beam 8 \
       --max_active 9000 --min_active 100 \
-      --nj $nspk --cmd "$decode_cmd" --num-threads 4 \
+      --nj 1 --cmd "$decode_cmd" --num-threads 4 \
       $graph_dir ${testset}_VAD model/ctdnn/decode_${rec_id} || exit 1
 fi
 
 if [ $stage -le 4 ]; then
+  echo
+  echo "FINAL FORMATTING"
+  echo
   mkdir -p $savepath/transcription
   gunzip -c model/ctdnn/decode_${rec_id}/lat.1.gz > model/ctdnn/decode_${rec_id}/lat.1
   lattice-best-path ark:model/ctdnn/decode_${rec_id}/lat.1  ark,t: | int2sym.pl -f 2- model/ctdnn/graph_4G_ALT/words.txt > $savepath/transcription/${rec_id}.txt
