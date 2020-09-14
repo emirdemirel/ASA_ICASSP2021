@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Begin configuration section
+# Configuration
 
 nj=1
 stage=0
@@ -11,10 +11,8 @@ alignment_model=ctdnn_sa    # FOR phoneme based NN model
                # gmm_hmm      FOR phoneme-based GMM-HMM model
                # gmm_hmm_grph FOR grapheme-based GMM-HMM model
 
-
 . ./path.sh
 . ./cmd.sh
-
 
 wavpath=$1
 lyricspath=$2
@@ -39,9 +37,6 @@ if [[ $stage -le 0 ]]; then
     cd ..
     mv $outdir_ss/demucs/${rec_id}/vocals.wav $outdir_ss/${rec_id}_vocals.wav
     rm -r $outdir_ss/demucs/${rec_id}/  # remove accompiment output as we won't need it.
-    #spleeter separate -i $wavpath -o $outdir_ss
-    #mv $outdir_ss/${rec_id}/vocals.wav $outdir_ss/${rec_id}_vocals.wav
-    #rm -r $outdir_ss/${rec_id}/  # remove accompiment output as we won't need it.
 fi
 
 wavpath_vocals=$outdir_ss/${rec_id}_vocals.wav
@@ -116,9 +111,6 @@ if [[ $alignment_model == 'ctdnn_sa' ]]; then
       $data_dir_segmented exp/make_mfcc/${n}_vadseg mfcc
     steps/compute_cmvn_stats.sh $data_dir_segmented
     utils/fix_data_dir.sh $data_dir_segmented
-    #steps/online/nnet2/extract_ivectors_online.sh --cmd "$train_cmd" --nj 1 \
-      #${data_dir_segmented} model/ivector/extractor \
-      #model/ivector/ivectors_${data_id}_hires
     echo "Forced alignment using Phoneme based CTDNN_SA model"
     echo
     ali_dir=exp/${rec_id}_vocals/${rec_id}_vocals_ali
@@ -138,7 +130,6 @@ if [[ $alignment_model == 'ctdnn_sa_grph' ]]; then
     echo "WORD-LEVEL ALIGNMENT"
     echo
     echo "Create graph for grapheme based model."
-    #cp -r data/dict_grph data/local/dict_grph
     lexicon_path=conf/lexicon_grph.txt
     python3 local/extend_lexicon.py $lexicon_path data/$rec_id/text data/local/dict_grph
     utils/prepare_lang.sh data/local/dict_grph "<UNK>" data/local/lang_grph $lang_dir_grph
@@ -181,7 +172,7 @@ if [[ $alignment_model == 'gmm_hmm' ]]; then
     echo "Forced alignment using Phoneme based CTDNN_SA model"
     echo
     ali_dir=exp/${rec_id}_vocals/${rec_id}_vocals_ali
-    steps/align_fmllr.sh --cmd "$train_cmd" --nj 1 --beam 30 --retry_beam 7000 \
+    steps/align_fmllr.sh --cmd "$train_cmd" --nj 1 --beam 50 --retry_beam 7000 \
       $data_dir_segmented $lang_dir $model_dir_chain $ali_dir
     echo "Generating output files"
     ./local/generate_output_alignment.sh --frame_shift 0.03 $data_dir_segmented $rec_id $lang_dir $ali_dir $savepath/alignment
@@ -190,10 +181,10 @@ if [[ $alignment_model == 'gmm_hmm' ]]; then
 fi
 
 
-#rm -r exp/${rec_id}_vocals/${rec_id}_vocals_segmentation
+rm -r exp/${rec_id}_vocals/${rec_id}_vocals_segmentation
 cp -r data/${rec_id}_vocals_vadseg $savepath/${rec_id}_vocals_vadseg
-#rm -r data/${rec_id}*
-#rm -r data/lang_${rec_id}
+rm -r data/${rec_id}*
+rm -r data/lang_${rec_id}
 
 echo
 echo "==== - ALIGNMENT ENDED SUCCESSFULLY! - ===="
