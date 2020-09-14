@@ -6,7 +6,6 @@ merge_endings=false
 
 set -e # exit on error
 
-#segmentation_opts="--silence-proportion 0.2 --max-segment-length 7 --hard-max-segment-length 15 "
 dataset_id=
 data_orig=
 wavpath_orig=
@@ -22,8 +21,8 @@ lang_dir=$3
 
 test_id=$(basename -- $testset)
 
-island_length=4
-num_iters=3
+island_length=3
+num_iters=5
 
 echo; echo "===== Starting at  $(date +"%D_%T") ====="; echo
 
@@ -53,15 +52,9 @@ if [[ $stage -le 1 ]]; then
     steps/compute_cmvn_stats.sh ${testset}_vad
     utils/fix_data_dir.sh ${testset}_vad
 
-    #echo "I-VECTOR EXTRACTION on VAD data"
-    #nspk=$(wc -l <${testset}_vad/spk2utt)
-    #steps/online/nnet2/extract_ivectors_online.sh --cmd "$train_cmd" --nj 1 \
-      #${testset}_vad exp/nnet3/extractor \
-      #exp/nnet3/ivectors_${test_id}_vad_hires
-
 fi
 
-# configuration for segmentation
+# Configuration for segmentation
 graph_dir=$model_dir/graph_4G
 working_dir=exp/$dataset_id/${test_id}_segmentation
 segment_store=$working_dir/segments_store
@@ -112,7 +105,6 @@ if [[ $stage -le 3 ]]; then
   text_end_index=$((num_text_words-1))
   echo $text_end_index
   audio_duration=`(wav-to-duration --read-entire-file scp:$data_dir/wav.scp ark,t:- 2>> $log_dir/output.log) | cut -d' ' -f2`
-  #cp ${testset}_vad/segments $working_dir/segments
   cp ${testset}/segments $working_dir/segments
   local/alignment/prepare_word_timings.sh $working_dir $working_dir \
       0 $text_end_index 0.00 $audio_duration \
@@ -142,12 +134,9 @@ if [[ $stage -le 6 ]]; then
               cat $segment_store/${segment_id}/ALIGNMENT_STATUS >> $working_dir/ALIGNMENT_STATUS.working.iter${x} || break
           steps/compute_cmvn_stats.sh $testset $working_dir/tmp/logdir/ \
               $working_dir/tmp/cmvndir >> $log_dir/output.log 2> $log_dir/err.log
-          #steps/online/nnet2/extract_ivectors_online.sh --cmd "$train_cmd" --nj 1 \
-      	      #$testset exp/nnet3/extractor \
-              #exp/nnet3/ivectors_${test_id}_iter${x}_vad_hires
 
           if [[ $x -eq $((num_iters-1)) ]]; then
-              island_length=2    # We set final
+              island_length=2    ### !
           fi  
           cp $testset/segments $segment_store/${segment_id}/segments
 	  time_begin="`echo $y | cut -d' ' -f1`"
@@ -191,7 +180,7 @@ if [[ $stage -le 6 ]]; then
           if [ "$(fstisstochastic $lang_dir/tmp/LG.fst.$$)" != "nan nan" ]; then
 	      local/alignment/decode_biased.sh 1 decode_${segment_id} \
                   $testset $segment_store/${segment_id} $lang_dir $model_dir \
-                  $island_length 100 $log_dir 2> $log_dir/err.log || exit 1
+                  $island_length 300 $log_dir 2> $log_dir/err.log || exit 1
               local/alignment/prepare_word_timings.sh $working_dir $segment_store/${segment_id} \
                   $word_begin_index $word_end_index $time_begin $time_end \
                   $log_dir 2> $log_dir/err.log  || (echo "Failed: prepare_word_timings.sh" && exit 1)
