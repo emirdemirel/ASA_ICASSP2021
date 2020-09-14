@@ -81,8 +81,3 @@ savepath='output-folder-name'       # This will be saved at 'dir-of-this-reposit
 ```
 ./run_mirex2020_transcription.sh $wavpath $savepath
 ```
-* (OPTIONAL) Transcribe with Grapheme based model:
-
-```
-./run_mirex2020_alignment.sh --align_with_grapheme true $wavpath $lyricspath $savepath
-```
