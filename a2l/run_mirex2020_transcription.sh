@@ -7,9 +7,14 @@ stage=1
 
 polyphonic=true   #set to false for accapella
 
+decoding_model=ctdnnsa_ivec    # FOR phoneme based NN model with ivectors
+               # ctdnnsa         FOR phoneme based NN model without ivectors
+decode_with_rnnlm=true        # Set 'true' for decoding with RNNLM
+
 . ./path.sh
 . ./cmd.sh
 
+. ./utils/parse_options.sh
 
 wavpath=$1
 savepath=$2
@@ -22,10 +27,15 @@ lang_dir=data/lang_${rec_id}
 
 testset=data/${rec_id}_vocals
 
+[[ ! -L "steps" ]] && ln -s $KALDI_ROOT/egs/wsj/s5/steps
+[[ ! -L "utils" ]] && ln -s $KALDI_ROOT/egs/wsj/s5/utils
+[[ ! -L "rnnlm" ]] && ln -s $KALDI_ROOT/egs/wsj/s5/rnnlm
+
 echo; echo "===== Starting at  $(date +"%D_%T") ====="; echo
 
 outdir_ss=$savepath/audio_vocals #output directory to save the vocals separated audio files.
-if [[ $polyphonic == true ]]; then
+if [[ $stage -le 0 ]]; then
+  if [[ $polyphonic == true ]]; then
     echo "SOURCE SEPARATION"
     # At this step, we separate vocals. This is required
     # for Vocal-Activity-Detection based initial audio 
@@ -35,11 +45,11 @@ if [[ $polyphonic == true ]]; then
     cd ..
     mv $outdir_ss/demucs/${rec_id}/vocals.wav $outdir_ss/${rec_id}_vocals.wav
     rm -r $outdir_ss/demucs/${rec_id}/  # remove accompiment output as we won't need it.
-else
-    mv $wavpath $outdir_ss/${rec_id}_vocals.wav
+  else
+    cp $wavpath $outdir_ss/${rec_id}_vocals.wav
 
+  fi
 fi
-
 wavpath_vocals=$outdir_ss/${rec_id}_vocals.wav
 if [[ $stage -le 1 ]]; then
 
@@ -70,7 +80,7 @@ if [[ $stage -le 2 ]]; then
     echo "INITIAL VOCAL ACTIVITY BASED SEGMENTATION"
     ./steps/compute_vad_decision.sh --nj 1 --cmd run.pl ${testset} exp/make_vad mfcc
     ./local/vad_to_segments.sh --nj 1 --min_duration 3 \
-      --segmentation_opts "--silence-proportion 0.8 --max-segment-length 5 --hard-max-segment-length 10 " \
+      --segmentation_opts "--silence-proportion 0.7 --max-segment-length 5 --hard-max-segment-length 10 " \
       ${testset} ${testset}_VAD 
     
     echo "FEATURE EXTRACTION on VAD data"   
@@ -82,33 +92,55 @@ if [[ $stage -le 2 ]]; then
 
 fi
 
-graph_dir=model/ctdnn/graph_4G_ALT
+graph_dir=model/$decoding_model/graph_4G_ALT
 if [ $stage -le 3 ]; then
-  echo
-  echo "DECODING"   
-  echo
-  steps/nnet3/decode.sh \
-      --acwt 1.0 --post-decode-acwt 10.0 \
-      --frames-per-chunk 140 --beam 2000 --lattice_beam 8 \
-      --max_active 9000 --min_active 100 \
-      --nj 1 --cmd "$decode_cmd" --num-threads 4 \
-      $graph_dir ${testset}_VAD model/ctdnn/decode_${rec_id} || exit 1
+    if [[ $decoding_model == 'ctdnnsa_ivec' ]]; then
+
+      echo "I-VECTOR EXTRACTION on VAD data"
+      steps/online/nnet2/extract_ivectors_online.sh --cmd "$train_cmd" --nj 1 \
+        ${testset}_VAD model/ivector/extractor \
+        model/ivector/ivectors_${rec_id}_VAD
+        
+      steps/nnet3/decode.sh --acwt 1.0 --post-decode-acwt 10.0 \
+        --frames-per-chunk 140 --beam 2000 --lattice_beam 8 \
+        --max_active 9000 --min_active 100 \
+        --nj 1 --cmd "$decode_cmd" --num-threads 4 \
+        --online-ivector-dir model/ivector/ivectors_${rec_id}_VAD \
+        $graph_dir ${testset}_VAD model/$decoding_model/decode_${rec_id} || exit 1
+    elif [[ $decoding_model == 'ctdnnsa' ]]; then
+
+      steps/nnet3/decode.sh --acwt 1.0 --post-decode-acwt 10.0 \
+        --frames-per-chunk 140 --beam 2000 --lattice_beam 8 \
+        --max_active 9000 --min_active 100 \
+        --nj 1 --cmd "$decode_cmd" --num-threads 4 \
+        $graph_dir ${testset}_VAD model/$decoding_model/decode_${rec_id} || exit 1
+    fi
 fi
 
-if [ $stage -le 4 ]; then
-  echo
-  echo "FINAL FORMATTING"
-  echo
+
+if [[ $stage -le 4 ]]; then
   mkdir -p $savepath/transcription
-  gunzip -c model/ctdnn/decode_${rec_id}/lat.1.gz > model/ctdnn/decode_${rec_id}/lat.1
-  lattice-best-path ark:model/ctdnn/decode_${rec_id}/lat.1  ark,t: | int2sym.pl -f 2- model/ctdnn/graph_4G_ALT/words.txt > $savepath/transcription/${rec_id}.txt
+  if [[ $decode_with_rnnlm == true ]]; then
+    # Here we rescore the lattices generated at stage 3
+    # with RNNLM.
+    lang_dir=model/rnnlm/language
+    rnnlm/lmrescore_pruned.sh --cmd "$decode_cmd --mem 4G" \
+      --weight 0.5 --max-ngram-order 4 --skip_scoring true $lang_dir \
+      model/rnnlm ${testset}_VAD model/$decoding_model/decode_${rec_id} \
+      model/$decoding_model/decode_${rec_id}_rnnlm
+    lat_dir=model/$decoding_model/decode_${rec_id}_rnnlm
+  else
+    lat_dir=model/$decoding_model/decode_${rec_id}
+  fi
+  gunzip -c $lat_dir/lat.1.gz > $lat_dir/lat.1
+  lattice-best-path ark:$lat_dir/lat.1  ark,t:- | int2sym.pl -f 2- model/$decoding_model/graph_4G_ALT/words.txt > $savepath/transcription/${rec_id}.txt || exit 1
   python local/format_output_ALT.py $savepath/transcription/${rec_id}.txt
 fi
 
-#rm -r data/${rec_id}*
+rm -r data/${rec_id}*
 
 echo
-echo "==== - ALIGNMENT ENDED SUCCESSFULLY! - ===="
+echo "==== - TRANSCRIPTION ENDED SUCCESSFULLY! - ===="
 echo "OUTPUTS ARE @ $savepath/transcription ."
 
 exit 1
