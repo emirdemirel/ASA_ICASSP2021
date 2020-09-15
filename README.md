@@ -101,5 +101,5 @@ savepath='output-folder-name'       # This will be saved at 'dir-of-this-reposit
 ```
 * (OPTIONAL) Decode with RNNLM:
 ```
-./run_mirex2020_transcription.sh --decode_with_rnnlm=true $wavpath $savepath
+./run_mirex2020_transcription.sh --decode_with_rnnlm true $wavpath $savepath
 ```
