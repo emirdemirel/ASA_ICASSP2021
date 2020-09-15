@@ -99,7 +99,7 @@ savepath='output-folder-name'       # This will be saved at 'dir-of-this-reposit
 ```
 ./run_mirex2020_transcription.sh --decoding_model model/ctdnnsa $wavpath $savepath
 ```
-* (OPTIONAL) Decode with 4-gram MaxEnt LM model only:
+* (OPTIONAL) Decode with 4-gram MaxEnt LM model:
 ```
 ./run_mirex2020_transcription.sh --decode_with_rnnlm false $wavpath $savepath
 ```
