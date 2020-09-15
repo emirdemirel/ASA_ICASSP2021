@@ -22,7 +22,7 @@ lang_dir=$3
 test_id=$(basename -- $testset)
 
 island_length=3
-num_iters=5
+num_iters=3
 
 echo; echo "===== Starting at  $(date +"%D_%T") ====="; echo
 
@@ -42,7 +42,7 @@ if [[ $stage -le 1 ]]; then
     echo "INITIAL VOCAL ACTIVITY BASED SEGMENTATION"
     ./steps/compute_vad_decision.sh --nj 1 --cmd run.pl ${testset} exp/make_vad mfcc
     ./local/vad_to_segments.sh --nj 1 --min_duration 3 \
-      --segmentation_opts "--silence-proportion 0.8 --max-segment-length 5 --hard-max-segment-length 10 " \
+      --segmentation_opts "--silence-proportion 0.8 --max-segment-length 7 --hard-max-segment-length 20 " \
       ${testset} ${testset}_vad 
     
     echo "FEATURE EXTRACTION on VAD data"   
@@ -84,14 +84,13 @@ if [[ $stage -le 2 ]]; then
   echo "Prepare biased Language Model"
   local/alignment/build_biased_lm.sh $working_dir $working_dir/lm_text \
     $lang_dir >> $log_dir/output.log 2> $log_dir/err.log || exit 1
-
   # Build biased decoding graph and transcribe
   echo "Decoding Begins!"
   num_lines=`wc -l $data_dir/feats.scp | cut -d' ' -f1`
   cp $data_dir/segments $testset/segments
   local/alignment/decode_biased.sh 1 decode ${testset}_vad \
     $working_dir $lang_dir $model_dir $island_length \
-    2000 $log_dir 2> $log_dir/err.log || exit 1
+    4000 $log_dir 2> $log_dir/err.log || exit 1
 
   echo "Iteration: 0 finished"
 fi
