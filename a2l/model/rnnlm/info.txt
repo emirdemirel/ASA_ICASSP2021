@@ -1,0 +1,14 @@
+num_iters=18
+num_epochs=90
+num_jobs_initial=1
+num_jobs_final=1
+rnnlm_max_change=0.5
+embedding_max_change=0.5
+chunk_length=32
+initial_effective_lrate=0.001
+final_effective_lrate=0.0001
+embedding_lrate_factor=0.1
+sample_group_size=2
+num_samples=512
+backstitch_training_scale=0.8
+backstitch_training_interval=1

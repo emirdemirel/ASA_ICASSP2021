@@ -1,0 +1,11 @@
+# This file was created by the command:
+# steps/nnet3/xconfig_to_configs.py --xconfig-file=exp/rnnlm_cnn_tdnn_1a/config/xconfig --config-dir=exp/rnnlm_cnn_tdnn_1a/config/nnet
+#It contains the same content as ./xconfig but it was parsed and
+#default config values were set.
+# See also ./xconfig.expanded.2
+
+input name=input dim=200
+lstm-layer name=lstm1 cell-dim=200 clipping-threshold=30.0 decay-time=-1.0 delay=-1 input=[-1] l2-regularize=0.005 ng-affine-options=" max-change=0.75 " ng-per-element-scale-options=" max-change=0.75" self-repair-scale-nonlinearity=1e-05 zeroing-interval=20 zeroing-threshold=15.0
+relu-renorm-layer name=tdnn add-log-stddev=False bias-stddev= bottleneck-dim=-1 dim=200 dropout-per-dim=False dropout-per-dim-continuous=False dropout-proportion=0.5 input=Append(0, IfDefined(-1)) l2-regularize=0.005 learning-rate-factor= max-change=0.75 ng-affine-options= ng-linear-options= self-repair-scale=1e-05 target-rms=1.0
+lstm-layer name=lstm2 cell-dim=200 clipping-threshold=30.0 decay-time=-1.0 delay=-1 input=[-1] l2-regularize=0.005 ng-affine-options=" max-change=0.75 " ng-per-element-scale-options=" max-change=0.75" self-repair-scale-nonlinearity=1e-05 zeroing-interval=20 zeroing-threshold=15.0
+output-layer name=output bias-stddev=0.0 bottleneck-dim=-1 dim=200 include-log-softmax=False input=[-1] l2-regularize=0.005 learning-rate-factor= max-change=1.5 ng-affine-options= ng-linear-options= objective-type=linear orthonormal-constraint=1.0 output-delay=0 param-stddev=0.0
