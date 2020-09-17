@@ -2,13 +2,15 @@
 
 # Requirements
 
+Docker
+
 Python3.6
 
 Anaconda
 
 Demucs
 
-Kaldi (see below for installation)
+Kaldi
 
 ## Setup
 
