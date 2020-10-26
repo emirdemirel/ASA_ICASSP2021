@@ -3,7 +3,7 @@
 # Configuration
 
 nj=1
-stage=0
+stage=1
 
 polyphonic=false   #set to false for accapella
 
@@ -32,7 +32,8 @@ echo; echo "===== Starting at  $(date +"%D_%T") ====="; echo
 
 outdir_ss=$savepath/audio_vocals #output directory to save the vocals separated audio files.
 mkdir -p $outdir_ss
-if [[ $polyphonic == true ]]; then
+if [[ $stage -le 0 ]]; then
+  if [[ $polyphonic == true ]]; then
     echo "SOURCE SEPARATION"
     # At this step, we separate vocals. This is required
     # for Vocal-Activity-Detection based initial audio 
@@ -42,9 +43,9 @@ if [[ $polyphonic == true ]]; then
     cd ..
     mv $outdir_ss/demucs/${rec_id}/vocals.wav $outdir_ss/${rec_id}_vocals.wav
     rm -r $outdir_ss/demucs/${rec_id}/  # remove accompiment output as we won't need it.
-else
+  else
     ffmpeg -i $wavpath $outdir_ss/${rec_id}_vocals.wav
-
+  fi
 fi
 
 ###################################
@@ -98,7 +99,7 @@ fi
 
 ######################################
 
-model_dir_chain=model/$decoding_model
+model_dir_chain=model/ctdnnsa_ivec
 if [[ $stage -le 3 ]]; then
     echo "AUDIO SEGMENTATION"
 
