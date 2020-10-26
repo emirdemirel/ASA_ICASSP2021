@@ -3,9 +3,9 @@
 # Configuration
 
 nj=1
-stage=1
+stage=0
 
-polyphonic=true   #set to false for accapella
+polyphonic=false   #set to false for accapella
 
 segmentation_method=single_pass    #      
                # recursive               
@@ -31,6 +31,7 @@ lang_dir=data/lang_${rec_id}
 echo; echo "===== Starting at  $(date +"%D_%T") ====="; echo
 
 outdir_ss=$savepath/audio_vocals #output directory to save the vocals separated audio files.
+mkdir -p $outdir_ss
 if [[ $polyphonic == true ]]; then
     echo "SOURCE SEPARATION"
     # At this step, we separate vocals. This is required
@@ -103,7 +104,7 @@ if [[ $stage -le 3 ]]; then
 
     echo
     if [[ $segmentation_method == 'single_pass' ]]; then
-      ./local/run_lyrics.sh --dataset_id ${rec_id}_vocals \
+      ./local/run_lyrics_segmentation.sh --dataset_id ${rec_id}_vocals \
         --wavpath_orig $wavpath --wavpath_vocals $wavpath_vocals \
         --data_orig data/${rec_id} data/${rec_id}_vocals \
         $model_dir_chain $lang_dir || exit 1
