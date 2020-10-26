@@ -1,8 +1,8 @@
-# Submission for Mirex2020 - Audio-to-Lyrics-Alignment Challenge
+# Low Resource Audio-to-lyrics alignment and transcription
+
+A Kaldi-based framework for audio-to-lyrics alignment and transcription with low RAM memory consumption.
 
 # Requirements
-
-Docker
 
 Python3.6
 
