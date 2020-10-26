@@ -53,25 +53,9 @@ wavpath='full-path-to-audio'        # i.e. /home/emir/ALTA/LyricsTranscription/w
 lyricspath='full-path-to-lyrics'    # i.e /home/emir/ALTA/LyricsTranscription/lyrics/Bohemian_Rhapsody.raw.txt
 savepath='output-folder-name'       # This will be saved at 'dir-of-this-repository'/a2l/$savepath
 ```
-* Run the pipeline / align with phoneme based model with ivectors (default):
+* Run the pipeline / align with phoneme based model(default):
 ```
 ./run_mirex2020_alignment.sh --decoding_model model/ctdnnsa_ivec --alignment_model model/ctdnnsa_ivec $wavpath $lyricspath $savepath
-```
-* (OPTIONAL) Align with Phoneme based model without ivectors:
-```
-./run_mirex2020_alignment.sh --alignment_model model/ctdnnsa $wavpath $lyricspath $savepath
-```
-* (OPTIONAL) Align with Grapheme based model:
-```
-./run_mirex2020_alignment.sh --alignment_model ctdnnsa_grph_ivec $wavpath $lyricspath $savepath
-```
-* (OPTIONAL) Align with GMM-HMM model:
-```
-./run_mirex2020_alignment.sh --alignment_model gmm_hmm $wavpath $lyricspath $savepath
-```
-* (OPTIONAL) Decode with Phoneme based model without ivectors:
-```
-./run_mirex2020_alignment.sh --decoding_model model/ctdnnsa $wavpath $lyricspath $savepath
 ```
 * Run the pipeline for accapella recordings:
 ```
@@ -89,17 +73,13 @@ Note : If you have any problems during the pipeline, look up for the relevant pr
 wavpath='full-path-to-audio'        # i.e. /home/emir/ALTA/LyricsTranscription/wav/Bohemian_Rhapsody.mp3
 savepath='output-folder-name'       # This will be saved at 'dir-of-this-repository'/a2l/$savepath
 ```
-* Run the pipeline with ivectors:
+* Run the pipeline:
 ```
 ./run_mirex2020_transcription.sh --decoding_model model/ctdnnsa_ivec $wavpath $savepath
 ```
 * (OPTIONAL) Run the pipeline on accapella recordings:
 ```
 ./run_mirex2020_transcription.sh --polyphonic false $wavpath $savepath
-```
-* (OPTIONAL) Run the pipeline without ivectors:
-```
-./run_mirex2020_transcription.sh --decoding_model model/ctdnnsa $wavpath $savepath
 ```
 * (OPTIONAL) Decode with 4-gram MaxEnt LM model:
 ```
