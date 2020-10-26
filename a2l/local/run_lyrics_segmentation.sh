@@ -113,6 +113,8 @@ if [[ $stage -le 3 ]]; then
   echo $text_end_index
   audio_duration=`(wav-to-duration --read-entire-file scp:$data_dir/wav.scp ark,t:- 2>> $log_dir/output.log) | cut -d' ' -f2`
   cp ${testset}/segments $working_dir/segments
+  sed -i 's/.//;s/.$//;s/,//'  $working_dir/ref_and_hyp_match
+  sed -i 's/.//;s/.$//;s/,//'  $working_dir/hyp_and_ref_match
   local/alignment/prepare_word_timings.sh $working_dir $working_dir \
       0 $text_end_index 0.00 $audio_duration \
       $log_dir 2> $log_dir/err.log || (echo "Failed at prepare_word_timings.sh" && exit 1)
@@ -192,6 +194,8 @@ if [[ $stage -le 6 ]]; then
                   $testset $segment_store/${segment_id} $lang_dir $model_dir $island_length \
                   model/ivector/ivectors_${test_id}_iter${x}_vad_hires \
                   300 $log_dir 2> $log_dir/err.log || exit 1
+	      sed -i 's/.//;s/.$//;s/,//'  $segment_store/${segment_id}/ref_and_hyp_match
+	      sed -i 's/.//;s/.$//;s/,//'  $segment_store/${segment_id}/hyp_and_ref_match
               local/alignment/prepare_word_timings.sh $working_dir $segment_store/${segment_id} \
                   $word_begin_index $word_end_index $time_begin $time_end \
                   $log_dir 2> $log_dir/err.log  || (echo "Failed: prepare_word_timings.sh" && exit 1)
@@ -202,6 +206,7 @@ if [[ $stage -le 6 ]]; then
               cat $segment_store/${segment_id}/ALIGNMENT_STATUS >> $working_dir/ALIGNMENT_STATUS.working.iter${x}
               merge_endings=true
           fi
+	  sed -i "s/[(),']//g" $working_dir/ALIGNMENT_STATUS.working.iter${x}
           done < <(cat $working_dir/ALIGNMENT_STATUS | grep PENDING)		
 	  # Update and clean up ALIGNMENT_STATUS file
 	  cp $working_dir/ALIGNMENT_STATUS $working_dir/ALIGNMENT_STATUS.iter$((x-1))
@@ -209,8 +214,9 @@ if [[ $stage -le 6 ]]; then
 	  cat $working_dir/ALIGNMENT_STATUS.working.iter${x} >> $working_dir/ALIGNMENT_STATUS.tmp
 	  cat $working_dir/ALIGNMENT_STATUS.tmp | sort -s -k 1,1n > $working_dir/ALIGNMENT_STATUS.tmp2
 	  local/alignment/cleanup_status.py $working_dir/ALIGNMENT_STATUS.tmp2 > $working_dir/ALIGNMENT_STATUS
-	  rm $working_dir/ALIGNMENT_STATUS.tmp*
-	  rm $working_dir/ALIGNMENT_STATUS.working.iter${x}
+	  sed -i "s/[(),']//g" $working_dir/ALIGNMENT_STATUS
+	  #rm $working_dir/ALIGNMENT_STATUS.tmp*
+	  #rm $working_dir/ALIGNMENT_STATUS.working.iter${x}
   done;
 fi
 
