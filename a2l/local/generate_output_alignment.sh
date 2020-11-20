@@ -94,7 +94,7 @@ if [ $stage -le 1 ]; then
       cut -d' ' -f1,3 > $dir/${rec_id}.lab || exit 1;
   else
     for n in `seq $nj`; do gunzip -c $dir/ctm.$n.gz; done | \
-      cut -d' ' -f1,3  > $dir/${rec_id}.lab || exit 1;
+      python local/reformat_ctm.py $dir/ctm.$n $dir/${rec_id}.lab || exit 1;
   fi
   sort -n -k1 $dir/${rec_id}.lab > $dir/${rec_id}.final.txt
   rm $dir/ctm.*.gz
