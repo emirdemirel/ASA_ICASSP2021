@@ -146,3 +146,17 @@ savepath='output-folder-name'       # This will be saved at 'dir-of-this-reposit
 ```
 ./run_mirex2020_transcription.sh --decode_with_rnnlm false $wavpath $savepath
 ```
+## D) Extract frame-level Phoneme posteriorgrams:
+
+This pipeline is designed for extracting the frame-level phoneme posteriorgrams from a capella recordings.
+
+```
+audio_path='absolute-path-to-the-input-audio-file'
+save_path='path-to-save-the-output
+./extract_phn_posteriorgram.sh $audio_path $save_path
+```
+
+The output posteriorgrams are saved as numpy arrays (.npy).
+
+Note that we have used 16kHz for the sample rate and 10ms of hop size.
+
