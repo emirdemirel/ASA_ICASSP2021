@@ -45,7 +45,9 @@ sed -i -- 's/path-to-your-kaldi-installation/${PATH_TO_YOUR_KALDI_INSTALLATION}/
 cd 'dir-of-this-repository'/a2l
 conda activate mirex2020_ED
 ```
-## A) Audio-to-lyrics Alignment
+## A) Low Resource Audio-to-lyrics Alignment from Long  Music Recordings
+
+This pipeline was designed for retrieving word alignments from long music recordings using low computational resources. There is no limit for the length of the input music recording.
 
 * Set variables:
 ```
@@ -53,20 +55,41 @@ wavpath='full-path-to-audio'        # i.e. /home/emir/ALTA/LyricsTranscription/w
 lyricspath='full-path-to-lyrics'    # i.e /home/emir/ALTA/LyricsTranscription/lyrics/Bohemian_Rhapsody.raw.txt
 savepath='output-folder-name'       # This will be saved at 'dir-of-this-repository'/a2l/$savepath
 ```
-* Run the pipeline / align with phoneme based model(default):
+* Run the pipeline:
 ```
 ./run_mirex2020_alignment.sh --decoding_model model/ctdnnsa_ivec --alignment_model model/ctdnnsa_ivec $wavpath $lyricspath $savepath
 ```
 * Run the pipeline for accapella recordings:
 ```
-./run_mirex2020_alignment.sh --polyphonic false $wavpath $lyricspath $savepath
+./run_lyrics_alignment_long.sh --polyphonic false $wavpath $lyricspath $savepath
 ```
 
 Note : If you have any problems during the pipeline, look up for the relevant process in ```run_mirex2020_alignment.sh```
 
-## B) Automatic Lyrics Transcription
+## B) Audio-to-lyrics Alignment for Long recordings
 
-* First, you need to obtain the trained decoding graph from me. Once you have ``` graph_4G_ALT```, relocate it to ```a2l/model/ctdnn/```. 
+This pipeline was designed for retrieving word and phoneme alignments from short audio recordings.
+
+* Set variables:
+```
+wavpath='full-path-to-audio'        # i.e. /home/emir/ALTA/LyricsTranscription/wav/Bohemian_Rhapsody.mp3
+lyricspath='full-path-to-lyrics'    # i.e /home/emir/ALTA/LyricsTranscription/lyrics/Bohemian_Rhapsody.raw.txt
+savepath='output-folder-name'       # This will be saved at 'dir-of-this-repository'/a2l/$savepath
+```
+* Run the pipeline:
+```
+./run_mirex2020_alignment.sh --decoding_model model/ctdnnsa_ivec --alignment_model model/ctdnnsa_ivec $wavpath $lyricspath $savepath
+```
+* Run the pipeline for accapella recordings:
+```
+./run_lyrics_alignment_short.sh --polyphonic false $wavpath $lyricspath $savepath
+```
+
+## C) Automatic Lyrics Transcription
+
+This pipeline is designed for transcribing the lyrics from singing voice performances.
+
+* First, you need to obtain the trained decoding graph from the author / creator of this repository : Emir Demirel. Once you have ``` graph_4G_ALT```, move it to ```a2l/model/ctdnn/```. 
 
 * Set variables:
 ```
@@ -75,11 +98,11 @@ savepath='output-folder-name'       # This will be saved at 'dir-of-this-reposit
 ```
 * Run the pipeline:
 ```
-./run_mirex2020_transcription.sh --decoding_model model/ctdnnsa_ivec $wavpath $savepath
+./run_lyrics_transcription.sh --decoding_model model/ctdnnsa_ivec $wavpath $savepath
 ```
 * (OPTIONAL) Run the pipeline on accapella recordings:
 ```
-./run_mirex2020_transcription.sh --polyphonic false $wavpath $savepath
+./run_lyrics_transcription.sh --polyphonic false $wavpath $savepath
 ```
 * (OPTIONAL) Decode with 4-gram MaxEnt LM model:
 ```
