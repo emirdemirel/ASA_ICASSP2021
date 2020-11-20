@@ -83,7 +83,7 @@ conda activate ALTA
 
 # HOW TO RUN
 
-## A) Low Resource Audio-to-lyrics Alignment from Long  Music Recordings
+## A) Low Resource Audio-to-lyrics Alignment from long  Recordings
 
 This pipeline was designed for retrieving word alignments from long music recordings using low computational resources. There is no limit for the length of the input music recording.
 
@@ -95,7 +95,7 @@ savepath='output-folder-name'       # This will be saved at 'dir-of-this-reposit
 ```
 * Run the pipeline:
 ```
-./run_mirex2020_alignment.sh --decoding_model model/ctdnnsa_ivec --alignment_model model/ctdnnsa_ivec $wavpath $lyricspath $savepath
+./run_lyrics_alignment_long.sh $wavpath $lyricspath $savepath
 ```
 * Run the pipeline for accapella recordings:
 ```
@@ -104,7 +104,7 @@ savepath='output-folder-name'       # This will be saved at 'dir-of-this-reposit
 
 Note : If you have any problems during the pipeline, look up for the relevant process in ```run_mirex2020_alignment.sh```
 
-## B) Audio-to-lyrics Alignment for Long recordings
+## B) Audio-to-lyrics Alignment for short recordings
 
 This pipeline was designed for retrieving word and phoneme alignments from short audio recordings.
 
@@ -116,7 +116,7 @@ savepath='output-folder-name'       # This will be saved at 'dir-of-this-reposit
 ```
 * Run the pipeline:
 ```
-./run_mirex2020_alignment.sh --decoding_model model/ctdnnsa_ivec --alignment_model model/ctdnnsa_ivec $wavpath $lyricspath $savepath
+./run_lyrics_alignment_short.sh $wavpath $lyricspath $savepath
 ```
 * Run the pipeline for accapella recordings:
 ```
@@ -144,7 +144,7 @@ savepath='output-folder-name'       # This will be saved at 'dir-of-this-reposit
 ```
 * (OPTIONAL) Decode with 4-gram MaxEnt LM model:
 ```
-./run_mirex2020_transcription.sh --decode_with_rnnlm false $wavpath $savepath
+./run_lyrics_transcription.sh --decode_with_rnnlm false $wavpath $savepath
 ```
 ## D) Extract frame-level Phoneme posteriorgrams:
 
