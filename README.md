@@ -4,15 +4,51 @@ A Kaldi-based framework for audio-to-lyrics alignment and transcription with low
 
 # Requirements
 
-Python3.6
+Ubuntu >= 14.04 
 
-Anaconda
+Docker
 
-Demucs
+~35GB empty space on harddisk
 
-Kaldi
+Uninterrupted Internet connection
 
 ## Setup
+
+## OPTION a) INSTALL and RUN using Docker
+
+For easy setup, we create a Docker container and install
+everything inside. All the libraries, dependencies, scripts
+and models will be downloaded automatically.
+
+Run below from the same directory with this README.md file.
+This process may take around an hour.
+
+```
+docker build --tag ALTA:latest -f Dockerfile . 
+```
+### SETUP the environment
+
+Set path to where you store the test data: 
+```
+DATASET='path-to-testset'
+```
+which should contain both the audio and lyrics text files at  "$DATASET/wav" and "$DATASET/lyrics"
+
+```
+docker run -v $DATASET:/a2l/dataset -it ALTA:latest
+```
+then, once you are inside the Docker container run:
+
+
+```
+source /root/miniconda3/etc/profile.d/conda.sh
+conda activate mirex2020_ED
+cd a2l
+```
+(You need to run the lines above every time you (re)start the Docker container.)
+
+
+## OPTION b) INSTALL and RUN locally
 
 ### 1) Kaldi  installation
 This framework is built as a [Kaldi](http://kaldi-asr.org/)[1] recipe 
@@ -26,7 +62,6 @@ cd a2l
 git clone https://github.com/facebookresearch/demucs
 cp local/demucs/separate.py demucs/demucs/separate.py
 conda env update -f environment.yml
-conda activate ALTA
 ```
 
 ### 3) Setup Kaldi environment
@@ -37,14 +72,17 @@ PATH_TO_YOUR_KALDI_INSTALLATION=
 sed -i -- 's/path-to-your-kaldi-installation/${PATH_TO_YOUR_KALDI_INSTALLATION}/g' a2l/path.sh
 ```
 
-## How to run
+### 4) Setup the conda environment
 
 
-* Navigate to working directory and activate the environment.
+* Navigate to the working directory and activate the environment.
 ```
 cd 'dir-of-this-repository'/a2l
-conda activate mirex2020_ED
+conda activate ALTA
 ```
+
+# HOW TO RUN
+
 ## A) Low Resource Audio-to-lyrics Alignment from Long  Music Recordings
 
 This pipeline was designed for retrieving word alignments from long music recordings using low computational resources. There is no limit for the length of the input music recording.
