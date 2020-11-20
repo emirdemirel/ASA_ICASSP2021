@@ -1,0 +1,5 @@
+input dim=200 name=input
+lstm-layer name=lstm1 cell-dim=200 l2-regularize=0.005
+relu-renorm-layer name=tdnn dim=200 l2-regularize=0.005 input=Append(0, IfDefined(-1))
+lstm-layer name=lstm2 cell-dim=200 l2-regularize=0.005
+output-layer name=output l2-regularize=0.005 include-log-softmax=false dim=200
