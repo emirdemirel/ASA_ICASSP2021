@@ -57,8 +57,9 @@ RUN wget \
     && rm -f Miniconda3-latest-Linux-x86_64.sh 
 RUN conda --version
 
+COPY a2l /a2l
 
-# Installing MIREX2020 package and the rest of the dependencies
+# Installing Audio-2-lyrics alignment package and the rest of the dependencies
 RUN cd a2l/ && \
     git clone https://github.com/facebookresearch/demucs && \
     conda env update -f environment.yml && \
