@@ -114,13 +114,27 @@ wavpath='full-path-to-audio'        # i.e. /home/emir/ALTA/LyricsTranscription/w
 lyricspath='full-path-to-lyrics'    # i.e /home/emir/ALTA/LyricsTranscription/lyrics/Bohemian_Rhapsody.raw.txt
 savepath='output-folder-name'       # This will be saved at 'dir-of-this-repository'/a2l/$savepath
 ```
-* Run the pipeline:
+### Alignment in recordings less than 30 seconds:
+
+
+* Run the pipeline for recordings:
 ```
 ./run_lyrics_alignment_short.sh $wavpath $lyricspath $savepath
 ```
 * Run the pipeline for accapella recordings:
 ```
 ./run_lyrics_alignment_short.sh --polyphonic false $wavpath $lyricspath $savepath
+```
+
+### Alignment in recordings more than 30 seconds:
+
+* Run the pipeline for recordings:
+```
+./run_lyrics_alignment_long.sh $wavpath $lyricspath $savepath
+```
+* Run the pipeline for accapella recordings:
+```
+./run_lyrics_alignment_long.sh --polyphonic false $wavpath $lyricspath $savepath
 ```
 
 ## C) Automatic Lyrics Transcription
