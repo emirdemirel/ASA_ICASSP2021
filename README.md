@@ -127,7 +127,7 @@ savepath='output-folder-name'       # This will be saved at 'dir-of-this-reposit
 
 This pipeline is designed for transcribing the lyrics from singing voice performances.
 
-* First, you need to obtain the trained decoding graph from the author / creator of this repository : Emir Demirel. Once you have ``` graph_4G_ALT```, move it to ```a2l/model/ctdnn/```. 
+* First, you need to obtain the trained decoding graph from the author / creator of this repository : Emir Demirel. Once you have ``` graph_4G_ALT```, copy that into the following location in the Docker container: ```/a2l/model/ctdnn/```. You can use ``` docker cp``` command for this.
 
 * Set variables:
 ```
