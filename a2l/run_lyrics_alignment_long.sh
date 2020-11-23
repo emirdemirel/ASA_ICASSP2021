@@ -3,7 +3,7 @@
 # Configuration
 
 nj=1
-stage=1
+stage=0
 
 polyphonic=false   #set to false for accapella
 
