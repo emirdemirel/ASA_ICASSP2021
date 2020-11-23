@@ -8,7 +8,7 @@ stage=0
 use_segments=true # if we have a segments file, use it to convert
                   # the segments to be relative to the original files.
 print_silence=false # if true, will print <eps> (optional-silence) arcs.
-
+nj=1
 #end configuration section.
 
 echo "$0 $@"  # Print the command line for logging
