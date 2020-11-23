@@ -24,7 +24,7 @@ Run below from the same directory with this README.md file.
 This process may take around an hour.
 
 ```
-docker build --tag ALTA:latest -f Dockerfile . 
+docker build --tag alta:latest -f Dockerfile . 
 ```
 ### SETUP the environment
 
@@ -35,14 +35,14 @@ DATASET='path-to-testset'
 which should contain both the audio and lyrics text files at  "$DATASET/wav" and "$DATASET/lyrics"
 
 ```
-docker run -v $DATASET:/a2l/dataset -it ALTA:latest
+docker run -v $DATASET:/a2l/dataset -it alta:latest
 ```
 then, once you are inside the Docker container run:
 
 
 ```
 source /root/miniconda3/etc/profile.d/conda.sh
-conda activate mirex2020_ED
+conda activate ALTA
 cd a2l
 ```
 (You need to run the lines above every time you (re)start the Docker container.)
