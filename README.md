@@ -43,7 +43,6 @@ then, once you are inside the Docker container run:
 ```
 source /root/miniconda3/etc/profile.d/conda.sh
 conda activate ALTA
-cd a2l
 ```
 (You need to run the lines above every time you (re)start the Docker container.)
 
