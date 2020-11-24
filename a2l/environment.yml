@@ -18,3 +18,4 @@ dependencies:
     - requests==2.22
     - treetable==0.2.3
     - num2words
+    - kaldiio
