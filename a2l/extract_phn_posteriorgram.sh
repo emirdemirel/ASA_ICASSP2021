@@ -4,7 +4,7 @@
 nj=40
 stage=1
 decode_nj=1
-output_path=out
+output_path=output
 
 
 . ./path.sh
@@ -46,7 +46,7 @@ fi
 
 
 mfccdir=mfcc
-ivector_model=models/ivector/extractor
+ivector_model=model/ivector/extractor
 if [[ $stage -le 2 ]]; then
   echo "============================="
   echo "---- MFCC FEATURE EXTRACTION  ----"
@@ -65,9 +65,9 @@ if [[ $stage -le 2 ]]; then
 fi
 
 
-tree_dir=models/tree
-acoustic_model_dir=models/ctdnnsa_ivec
-lang_dir=models/lang   # This is actually not a language model, rather pronunciation model,
+tree_dir=model/tree
+acoustic_model_dir=model/ctdnnsa_ivec
+lang_dir=model/lang_chain_4G   # This is actually not a language model, rather pronunciation model,
                        # but the folder contains files that define that phoneme space.
 if [[ $stage -le 3 ]]; then
 
