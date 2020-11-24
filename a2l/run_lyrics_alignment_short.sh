@@ -150,10 +150,9 @@ if [[ $stage -le 5 ]]; then
 
 fi
 
-rm -r exp/ivectors_${rec_id}_vocals
-rm -r exp/lats_${rec_id}*
-rm -r data/${rec_id}*
-rm -r data/lang*
+rm -r exp
+rm -r data
+rm -r mfcc
 
 echo
 echo "==== - ALIGNMENT ENDED SUCCESSFULLY! - ===="
