@@ -23,7 +23,7 @@ def main(lyrics_path,wav_path,lexicon_path,save_dir):
         t_raw = ' '.join(t).replace('  ',' ')
         text.append(utt_id + ' ' + t_raw.upper())
         utt2spk.append(utt_id + ' ' + utt_id)
-        wavscp.append(utt_id + ' sox --norm ' + wav_path +' -G -t wav -r 16000 -c 1 - remix 1 |')
+        wavscp.append(utt_id + ' sox --norm=-3 ' + wav_path +' -G -t wav -r 16000 -c 1 - remix 1 |')
     # Extract Out of Vocabulary words in the test file.
     # This is necessary for extending the lexicon for alignment stage.
     oov_words = []

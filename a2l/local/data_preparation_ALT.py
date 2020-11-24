@@ -10,7 +10,7 @@ def main(wav_path,save_dir):
     utt_id = wav_path.split('.'+audio_format)[0].split('/')[-1]
  
     utt2spk = utt_id + ' ' + utt_id
-    wavscp = utt_id + ' sox --norm ' + wav_path +' -G -t wav -r 16000 -c 1 - remix 1 |'
+    wavscp = utt_id + ' sox --norm=-3 ' + wav_path +' -G -t wav -r 16000 -c 1 - remix 1 |'
     text = utt_id
         
     with open(os.path.join(save_dir,'text'),'w') as wt, open(os.path.join(save_dir,'wav.scp'),'w') as ww, open(os.path.join(save_dir,'utt2spk'),'w') as wu:                
