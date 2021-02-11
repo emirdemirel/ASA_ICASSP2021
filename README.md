@@ -1,4 +1,4 @@
-# ASAL - Anchor, Segment & Align
+# ASA - Anchor, Segment & Aign
 
 #### Low Resource Audio-to-lyrics alignment and transcription: 
 
