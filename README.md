@@ -1,4 +1,6 @@
-# Low Resource Audio-to-lyrics alignment and transcription
+# ASAL - Anchor, Segment & Align
+
+#### Low Resource Audio-to-lyrics alignment and transcription: 
 
 A Kaldi-based framework for audio-to-lyrics alignment and transcription with low RAM memory consumption.
 
