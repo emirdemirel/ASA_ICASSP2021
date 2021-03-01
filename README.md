@@ -26,7 +26,7 @@ Run below from the same directory with this README.md file.
 This process may take around an hour.
 
 ```
-docker build --tag alta:latest -f Dockerfile . 
+docker build --tag asa:latest -f Dockerfile . 
 ```
 ### SETUP the environment
 
@@ -37,7 +37,7 @@ DATASET='path-to-testset'
 which should contain both the audio and lyrics text files at  "$DATASET/wav" and "$DATASET/lyrics"
 
 ```
-docker run -v $DATASET:/a2l/dataset -it alta:latest
+docker run -v $DATASET:/a2l/dataset -it asa:latest
 ```
 then, once you are inside the Docker container run:
 
@@ -79,12 +79,10 @@ sed -i -- 's/path-to-your-kaldi-installation/${PATH_TO_YOUR_KALDI_INSTALLATION}/
 * Navigate to the working directory and activate the environment.
 ```
 cd 'dir-of-this-repository'/a2l
-conda activate ALTA
+conda activate ASA
 ```
 
 # HOW TO RUN
-
-## A) Low Resource Audio-to-lyrics Alignment from long  Recordings
 
 This pipeline was designed for retrieving word alignments from long music recordings using low computational resources. There is no limit for the length of the input music recording.
 
@@ -103,53 +101,6 @@ savepath='output-folder-name'       # This will be saved at 'dir-of-this-reposit
 ./run_lyrics_alignment_long.sh --polyphonic false $wavpath $lyricspath $savepath
 ```
 
-Note : If you have any problems during the pipeline, look up for the relevant process in ```run_mirex2020_alignment.sh```
+Note : If you have any problems during the pipeline, look up for the relevant process in ```run_lyrics_alignment_long.sh```
 
-## B) Audio-to-lyrics Alignment for short recordings
-
-This pipeline was designed for retrieving word and phoneme alignments from short audio recordings.
-
-* Set variables:
-```
-wavpath='full-path-to-audio'        # i.e. /home/emir/ALTA/LyricsTranscription/wav/Bohemian_Rhapsody.mp3
-lyricspath='full-path-to-lyrics'    # i.e /home/emir/ALTA/LyricsTranscription/lyrics/Bohemian_Rhapsody.raw.txt
-savepath='output-folder-name'       # This will be saved at 'dir-of-this-repository'/a2l/$savepath
-```
-### Alignment in recordings less than 30 seconds:
-
-
-* Run the pipeline for recordings:
-```
-./run_lyrics_alignment_short.sh $wavpath $lyricspath $savepath
-```
-* Run the pipeline for accapella recordings:
-```
-./run_lyrics_alignment_short.sh --polyphonic false $wavpath $lyricspath $savepath
-```
-
-### Alignment in recordings more than 30 seconds:
-
-* Run the pipeline for recordings:
-```
-./run_lyrics_alignment_long.sh $wavpath $lyricspath $savepath
-```
-* Run the pipeline for accapella recordings:
-```
-./run_lyrics_alignment_long.sh --polyphonic false $wavpath $lyricspath $savepath
-```
-
-
-## D) Extract frame-level Phoneme posteriorgrams:
-
-This pipeline is designed for extracting the frame-level phoneme posteriorgrams from a capella recordings.
-
-```
-audio_path='absolute-path-to-the-input-audio-file'
-save_path='path-to-save-the-output
-./extract_phn_posteriorgram.sh $audio_path $save_path
-```
-
-The output posteriorgrams are saved as numpy arrays (.npy).
-
-Note that we have used 16kHz for the sample rate and 10ms of hop size.
 
