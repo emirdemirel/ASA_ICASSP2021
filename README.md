@@ -138,29 +138,7 @@ savepath='output-folder-name'       # This will be saved at 'dir-of-this-reposit
 ./run_lyrics_alignment_long.sh --polyphonic false $wavpath $lyricspath $savepath
 ```
 
-## C) Automatic Lyrics Transcription
 
-This pipeline is designed for transcribing the lyrics from singing voice performances.
-
-* First, you need to obtain the trained decoding graph from the author / creator of this repository : Emir Demirel. Once you have ``` graph_4G_ALT```, copy that into the following location in the Docker container: ```/a2l/model/ctdnn/```. You can use ``` docker cp``` command for this.
-
-* Set variables:
-```
-wavpath='full-path-to-audio'        # i.e. /home/emir/ALTA/LyricsTranscription/wav/Bohemian_Rhapsody.mp3
-savepath='output-folder-name'       # This will be saved at 'dir-of-this-repository'/a2l/$savepath
-```
-* Run the pipeline:
-```
-./run_lyrics_transcription.sh --decoding_model model/ctdnnsa_ivec $wavpath $savepath
-```
-* (OPTIONAL) Run the pipeline on accapella recordings:
-```
-./run_lyrics_transcription.sh --polyphonic false $wavpath $savepath
-```
-* (OPTIONAL) Decode with 4-gram MaxEnt LM model:
-```
-./run_lyrics_transcription.sh --decode_with_rnnlm false $wavpath $savepath
-```
 ## D) Extract frame-level Phoneme posteriorgrams:
 
 This pipeline is designed for extracting the frame-level phoneme posteriorgrams from a capella recordings.
