@@ -1,9 +1,0 @@
-# This file was created by the command:
-# steps/nnet3/xconfig_to_configs.py --xconfig-file=exp/rnnlm_cnn_tdnn_1a/config/xconfig --config-dir=exp/rnnlm_cnn_tdnn_1a/config/nnet
-# It is a copy of the source from which the config files in # this directory were generated.
-
-input dim=200 name=input
-lstm-layer name=lstm1 cell-dim=200 l2-regularize=0.005
-relu-renorm-layer name=tdnn dim=200 l2-regularize=0.005 input=Append(0, IfDefined(-1))
-lstm-layer name=lstm2 cell-dim=200 l2-regularize=0.005
-output-layer name=output l2-regularize=0.005 include-log-softmax=false dim=200
