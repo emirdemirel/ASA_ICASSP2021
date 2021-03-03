@@ -1,4 +1,4 @@
-# ASA - Anchor, Segment & Aign
+# ALA - (A)udio-to-(L)yrics (A)lignment
 
 #### Low Resource Audio-to-lyrics alignment and transcription: 
 
