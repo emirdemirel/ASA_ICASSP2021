@@ -26,7 +26,7 @@ Run below from the same directory with this README.md file.
 This process may take around an hour.
 
 ```
-docker build --tag asa:latest -f Dockerfile . 
+docker build --tag ala:latest -f Dockerfile . 
 ```
 ### SETUP the environment
 
@@ -44,7 +44,7 @@ then, once you are inside the Docker container run:
 
 ```
 source /root/miniconda3/etc/profile.d/conda.sh
-conda activate ALTA
+conda activate ALA
 ```
 (You need to run the lines above every time you (re)start the Docker container.)
 
@@ -79,7 +79,7 @@ sed -i -- 's/path-to-your-kaldi-installation/${PATH_TO_YOUR_KALDI_INSTALLATION}/
 * Navigate to the working directory and activate the environment.
 ```
 cd 'dir-of-this-repository'/a2l
-conda activate ASA
+conda activate ALA
 ```
 
 # HOW TO RUN
