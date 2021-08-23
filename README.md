@@ -1,8 +1,10 @@
-# ALA - (A)udio-to-(S)ong (A)lignment
+# ASA - (A)udio-to-(S)ong (A)lignment
 
 #### An Audio-to-lyrics alignment with low memory footprint: 
 
 A Kaldi-based framework for audio-to-lyrics alignment and transcription with low RAM memory consumption.
+
+**Future work:** There will be new scripts provided for aligning lyrics in shorter auio clips in a less-time consuming way.
 
 # Requirements
 
