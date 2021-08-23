@@ -16,8 +16,6 @@ Docker
 
 ~35GB empty space on harddisk
 
-Uninterrupted Internet connection
-
 ## Setup
 
 ## OPTION a) INSTALL and RUN using Docker
