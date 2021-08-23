@@ -6,6 +6,29 @@ A Kaldi-based framework for audio-to-lyrics alignment and transcription with low
 
 **Future work:** There will be new scripts provided for aligning lyrics in shorter auio clips in a less-time consuming way.
 
+If you use this code in your work, please cite:
+```
+@INPROCEEDINGS{demirel2021_asa,
+  author={Demirel, Emir and Ahlbäck, Sven and Dixon, Simon},
+  booktitle={ICASSP 2021 - 2021 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)}, 
+  title={Low Resource Audio-To-Lyrics Alignment from Polyphonic Music Recordings}, 
+  year={2021},
+  pages={586-590},
+  doi={10.1109/ICASSP39728.2021.9414395}}
+```
+
+If you use the pretrained models under ```a2l/models``` directory, please cite:
+
+```
+@INPROCEEDINGS{demirel2020_alta,
+  author={Demirel, Emir and Ahlbäck, Sven and Dixon, Simon},
+  booktitle={2020 International Joint Conference on Neural Networks (IJCNN)}, 
+  title={Automatic Lyrics Transcription using Dilated Convolutional Neural Networks with Self-Attention}, 
+  year={2020},
+  pages={1-8},
+  doi={10.1109/IJCNN48605.2020.9207052}}
+```
+
 # Requirements
 
 Ubuntu >= 14.04 
