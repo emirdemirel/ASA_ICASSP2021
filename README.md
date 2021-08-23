@@ -46,7 +46,7 @@ then, once you are inside the Docker container run:
 
 ```
 source /root/miniconda3/etc/profile.d/conda.sh
-conda activate ALA
+conda activate ASA
 ```
 (You need to run the lines above every time you (re)start the Docker container.)
 
