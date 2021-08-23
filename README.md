@@ -1,6 +1,6 @@
-# ALA - (A)udio-to-(L)yrics (A)lignment
+# ALA - (A)udio-to-(S)ong (A)lignment
 
-#### Low Resource Audio-to-lyrics alignment: 
+#### An Audio-to-lyrics alignment with low memory footprint: 
 
 A Kaldi-based framework for audio-to-lyrics alignment and transcription with low RAM memory consumption.
 
@@ -26,7 +26,7 @@ Run below from the same directory with this README.md file.
 This process may take around an hour.
 
 ```
-docker build --tag ala:latest -f Dockerfile . 
+docker build --tag asa:latest -f Dockerfile . 
 ```
 ### SETUP the environment
 
