@@ -1,4 +1,4 @@
-name: ALA
+name: ASA
 
 channels:
   - conda-forge
