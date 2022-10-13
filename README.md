@@ -88,6 +88,8 @@ conda activate ALA
 
 This pipeline was designed for retrieving word alignments from long music recordings using low computational resources. There is no limit for the length of the input music recording.
 
+***IMPORTANT NOTICE***: You need a pretrained acoustic model and an ivector model to run the alignment scripts below. To train your own Kaldi lyrics transcriber, please refer to ```https://github.com/emirdemirel/ALTA/blob/master/run_mstrenet.sh```.
+
 * Set variables:
 ```
 wavpath='full-path-to-audio'        # i.e. /home/emir/ALTA/LyricsTranscription/wav/Bohemian_Rhapsody.mp3
